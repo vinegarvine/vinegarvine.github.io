@@ -1,0 +1,193 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #1a1a1a;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+}
+
+.site-title {
+    margin-left: 10px;
+    font-size: 24px;
+    background: linear-gradient(to right, white, purple);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+nav a {
+    color: #b3a6f4;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+main {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Home Page styles */
+.comics {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.comic {
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    background-color: #1A1919;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.comic img {
+    width: 150px;
+    height: 200px;
+    display: block;
+    margin: 0 auto 10px;
+    
+}
+
+.comic p {
+    color: #fff;
+}
+
+/* Comic Cover Page styles */
+.comic-details {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.comic-details img {
+    width: 200px;
+    height: 300px;
+    margin-right: 20px; /* Added margin for spacing */
+}
+
+.comic-details h1, .comic-details h2 {
+    margin: 10px 0;
+}
+
+.description-box {
+    background-color: #1A1919;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px 0;
+    max-width: 600px;
+    line-height: 20px;
+    text-align: left;
+    flex-grow: 1; /* Allow the description box to grow and fill available space */
+}
+
+.description-box h2 {
+    font-size: 19px;
+}
+
+.description-box p {
+    color: #bbb;
+    line-height: 25px;
+}
+
+.read-first {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6a0dad;
+    color: #fff;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.read-first:hover {
+    background-color: #8a2be2;
+}
+
+.chapter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    max-width: 1000px;
+}
+
+.chapter-buttons a {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    border: 1px solid #444;
+    border-radius: 50px;
+}
+
+.chapter-buttons a :hover {
+    background-color: #444;
+}
+
+/* Comic Reader Page styles */
+.comic-reader {
+    text-align: center;
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+}
+
+.navigation-buttons a {
+    color: #fff;
+    background-color: #6a0dad;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 5px;
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.navigation-buttons a:hover {
+    background-color: #8a2be2;
+}
+
+.navigation-buttons a:first-child {
+    margin-right: 10px; /* Add margin only to the right of the first button */
+}
+
+.navigation-buttons a:nth-child(2) {
+    margin-left: 500px; /* Add margin only to the left of the second button */
+}
+
+.comic-reader img {
+    width: 55%;
+    margin: 0px 0;
+}

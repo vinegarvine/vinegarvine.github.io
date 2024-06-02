@@ -65,11 +65,12 @@ main {
     background-color: #1A1919;
     padding: 20px;
     border-radius: 5px;
+    width: 150px;
 }
 
 .comic img {
-    width: 150px;
-    height: 200px;
+    width: 100%;
+    height: auto;
     display: block;
     margin: 0 auto 10px;
     
@@ -88,8 +89,8 @@ main {
 }
 
 .comic-details img {
-    width: 200px;
-    height: 300px;
+    width: 219px;
+    height: 296px;
     margin-right: 20px; /* Added margin for spacing */
 }
 
@@ -124,6 +125,9 @@ main {
     color: #fff;
     text-decoration: none;
     margin-top: 10px;
+    border-radius: 2px;
+    text-align: center;
+    align-content: center;
 }
 
 .read-first:hover {
@@ -184,10 +188,98 @@ main {
 }
 
 .navigation-buttons a:nth-child(2) {
-    margin-left: 500px; /* Add margin only to the left of the second button */
+    margin-left: 200px; /* Add margin only to the left of the second button */
 }
 
 .comic-reader img {
     width: 55%;
     margin: 0px 0;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .site-title {
+        font-size: 20px;
+    }
+
+    nav a {
+        margin: 5px;
+    }
+
+    .comic-details {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .description-box {
+        max-width: 190%;
+        width: 100%;
+    }
+    .read-first {
+        display: flex;
+        padding: 10px 20px;
+        background-color: #6a0dad;
+        color: #fff;
+        text-decoration: none;
+        margin-top: 10px;
+        text-align: center;
+        justify-content: center;
+        align-content: center;
+        width: 50%;
+        box-sizing: border-box;
+        
+    }
+
+    .read-first:hover {
+        background-color: #8a2be2;
+    }
+
+    .chapter-buttons a {
+        flex: 1 1 20%; /* Make buttons kinda full width on mobile */
+        text-align: center;
+        align-items: center;
+        max-width: 25%;
+    }
+
+    .navigation-buttons {
+        flex: 1 1 45%;
+        display: flex;
+        margin: 10px 0;
+    }
+
+
+    .navigation-buttons a {
+        flex: 1 1 45%; /* Make buttons 45% width on mobile */
+        padding: 10px 10px;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        max-width: 40%;
+        width: 100px;
+        font-size: 15px;
+    }
+    .navigation-buttons a:hover {
+        background-color: #8a2be2;
+        padding: 10px 10px;
+        
+    }
+    
+    .navigation-buttons a:first-child {
+        margin-right: 5px; /* Add margin only to the right of the first button */
+        padding: 10px 10px;
+    }
+    
+    .navigation-buttons a:nth-child(2) {
+        margin-left: 5px; /* Add margin only to the left of the second button */
+        padding: 10px 10px;
+    }
+    .comic-reader img {
+        width: 80%;
+        margin: 0px 0;
+    }
 }

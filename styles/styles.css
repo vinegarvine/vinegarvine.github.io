@@ -260,7 +260,7 @@ main {
         flex: 1 1 20%; /* Make buttons kinda full width on mobile */
         text-align: center;
         align-items: center;
-        max-width: 25%;
+        max-width: 30%;
         font-size: 12px;
     }
 

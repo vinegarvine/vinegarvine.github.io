@@ -31,6 +31,7 @@ header {
     background: linear-gradient(to right, white, purple);
     -webkit-background-clip: text;
     color: transparent;
+    font-weight: bold;
 }
 
 nav a {
@@ -197,14 +198,28 @@ main {
 }
 
 /* Media Queries for Mobile Responsiveness */
-@media (max-width: 768px) {
-    .logo {
-        width: 40px;
-        height: 40px;
+@media (max-width: 1000px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .logo-container {
+        margin-bottom: 10px;
     }
 
     .site-title {
         font-size: 20px;
+    }
+    
+    .logo {
+        width: 20px;
+        height: 20px;
+    }
+
+    .site-title {
+        font-size: 15px;
+        font-weight: bold;
     }
 
     nav a {
@@ -214,6 +229,7 @@ main {
     .comic-details {
         flex-direction: column;
         text-align: center;
+        font-size: 14px;
     }
     
     .description-box {
@@ -232,6 +248,7 @@ main {
         align-content: center;
         width: 50%;
         box-sizing: border-box;
+        font-size: 15px;
         
     }
 
@@ -244,12 +261,14 @@ main {
         text-align: center;
         align-items: center;
         max-width: 25%;
+        font-size: 12px;
     }
 
     .navigation-buttons {
         flex: 1 1 45%;
         display: flex;
         margin: 10px 0;
+        font-size: 12px;
     }
 
 
@@ -259,13 +278,12 @@ main {
         justify-content: center;
         align-items: center;
         text-align: center;
-        max-width: 40%;
-        width: 100px;
-        font-size: 15px;
+        max-width: 45%;
+        width: 50px;
+        font-size: 12px;
     }
     .navigation-buttons a:hover {
         background-color: #8a2be2;
-        padding: 10px 10px;
         
     }
     

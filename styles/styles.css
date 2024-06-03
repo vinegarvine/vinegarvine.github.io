@@ -141,21 +141,22 @@ main {
     gap: 10px;
     justify-content: center;
     margin-top: 20px;
+    margin-bottom: 90px;
     max-width: 1000px;
 }
 
 .chapter-buttons a {
-    padding: 10px 20px;
+    padding: 10px 50px;
     background-color: #333;
     color: #fff;
     text-decoration: none;
     text-align: center;
     border: 1px solid #444;
-    border-radius: 50px;
+    border-radius: 20px;
 }
 
-.chapter-buttons a :hover {
-    background-color: #444;
+.chapter-buttons :hover {
+    background-color: #ae4490;
 }
 
 /* Comic Reader Page styles */
@@ -257,11 +258,11 @@ main {
     }
 
     .chapter-buttons a {
-        flex: 1 1 30%; /* Make buttons kinda full width on mobile */
+        flex: 1 1 50%; /* Make buttons kinda full width on mobile */
         text-align: center;
         align-items: center;
         max-width: 30%;
-        font-size: 12px;
+        font-size: 10px;
     }
 
     .navigation-buttons {

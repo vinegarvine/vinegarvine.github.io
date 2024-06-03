@@ -8,7 +8,19 @@ document.addEventListener('DOMContentLoaded', function() {
         2: 36,
         3: 33,
         4: 32,
-
+        5: 30,
+        6: 35,
+        7: 35,
+        8: 33,
+        9: 34,
+        10: 38,
+        11: 33,
+        12: 29,
+        13: 38,
+        14: 40,
+        15: 18,
+        16: 17,
+        17: 23,
 
         // Add more chapters as needed
     };

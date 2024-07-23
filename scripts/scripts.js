@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
         15: 18,
         16: 17,
         17: 23,
+        92: 30
 
         // Add more chapters as needed
     };
@@ -91,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Set the comic title and chapter number
     const comicTitleElement = document.getElementById('comic-title');
-    comicTitleElement.textContent = `I Parry Everything - Chapter ${chapter}`;
+    comicTitleElement.textContent = `Trauma Center: Golden Hour - Chapter ${chapter}`;
 
 
     // Navigation buttons functionality

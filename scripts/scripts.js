@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
         15: 18,
         16: 17,
         17: 23,
-        92: 30
+        92: 30,
+        93: 30
 
         // Add more chapters as needed
     };

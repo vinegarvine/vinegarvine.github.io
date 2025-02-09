@@ -22,7 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
         16: 17,
         17: 23,
         92: 30,
-        93: 30
+        93: 30,
+        94: 30,
+        95: 30
 
         // Add more chapters as needed
     };

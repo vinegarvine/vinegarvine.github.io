@@ -3,47 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Gem Scans - Read your favorite comics online for free">
-    <meta name="keywords" content="comics, manga, webtoons, online comics, free comics">
-    <title>Gem Scans</title>
-    <link rel="stylesheet" href="styles/styles.css">
+    <meta name="description" content="Read comics on Gem Scans">
+    <title>Comic Reader - Gem Scans</title>
+    <link rel="stylesheet" href="../styles/styles.css">
     <link rel="icon" href="https://i.ibb.co/yyB97BH/logoatt3.png" type="image/png">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8646272014401304"
      crossorigin="anonymous"></script>
-    <script data-cfasync="false" src="/sw.js"></script>
-    <script id="hydro_config" type="text/javascript">
-    window.Hydro_tagId = "386e332a-a7b1-4c2e-8f3b-d5f375d4adc4"; 
-    </script>
-    <script id="hydro_script" src="https://track.hydro.online/"></script>
 </head>
 <body>
     <header>
         <div class="logo-container">
-            <a href="index.html">
+            <a href="../index.html">
                 <img src="https://i.ibb.co/yyB97BH/logoatt3.png" alt="Gem Scans Logo" class="logo">
             </a>
-            <a href="index.html" class="site-title">Gem Scans</a>
+            <a href="../index.html" class="site-title">Gem Scans</a>
         </div>
-        
         <nav>
-            <a href="index.html">Home</a>
-            <a href="index.html">Comics</a>
+            <a href="../index.html">Home</a>
+            <a href="../index.html">Comics</a>
             <a href="https://forms.gle/XgQbVLfzsbdRxBE99" target="_blank">Contact</a>
         </nav>
     </header>
-    <main>
-        <section class="comics">
-            <!-- Comics will be loaded dynamically by JavaScript -->
-        </section>
+    <main class="comic-reader">
+        <div id="comic-title" class="comic-title">Loading comic...</div>
+        <div class="navigation-buttons">
+            <a id="back-to-cover" href="#">Cover</a>
+            <a id="prev-chapter" href="#">Previous</a>
+            <a id="next-chapter" href="#">Next</a>
+        </div>
+        <div id="comic-images">
+            <!-- Images will be loaded here by JavaScript -->
+            <div class="loading-indicator">Loading comic pages...</div>
+        </div>
+        <div class="navigation-buttons">
+            <a id="back-to-cover-bottom" href="#">Cover</a>
+            <a id="prev-chapter-bottom" href="#">Previous</a>
+            <a id="next-chapter-bottom" href="#">Next</a>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 Gem Scans. All rights reserved.</p>
     </footer>
     
     <!-- Load data first -->
-    <script src="scripts/comics-data.js"></script>
+    <script src="../scripts/comics-data.js"></script>
     <!-- Then load main scripts -->
-    <script src="scripts/scripts.js"></script>
+    <script src="../scripts/scripts.js"></script>
     
     <!-- Ad scripts -->
     <script type="text/javascript">
@@ -59,4 +64,4 @@
     <script async="async" data-cfasync="false" src="//pl23467842.highcpmgate.com/3aed0c71c2a91d74b9c2991b876d02c0/invoke.js"></script>
     <div id="container-3aed0c71c2a91d74b9c2991b876d02c0"></div>
 </body>
-</html>
+</html> 

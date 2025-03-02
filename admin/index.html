@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gem Scans Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1, h2 {
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #8a2be2;
+        }
+        
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            margin-bottom: 20px;
+        }
+        
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            color: #333;
+        }
+        
+        .tab button:hover {
+            background-color: #ddd;
+        }
+        
+        .tab button.active {
+            background-color: #6a0dad;
+            color: white;
+        }
+        
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+        
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        #output pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gem Scans Admin</h1>
+        
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab(event, 'addComic')">Add Comic</button>
+            <button class="tablinks" onclick="openTab(event, 'addChapter')">Add Chapter</button>
+            <button class="tablinks" onclick="openTab(event, 'viewComics')">View Comics</button>
+        </div>
+        
+        <div id="addComic" class="tabcontent" style="display: block;">
+            <h2>Add New Comic</h2>
+            <div class="form-group">
+                <label for="comicId">Comic ID:</label>
+                <input type="number" id="comicId" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="comicTitle">Title:</label>
+                <input type="text" id="comicTitle" required>
+            </div>
+            <div class="form-group">
+                <label for="coverImage">Cover Image Path:</label>
+                <input type="text" id="coverImage" placeholder="../images/COVERS/your-image.jpg" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="firstChapter">First Chapter Number:</label>
+                <input type="number" id="firstChapter" min="1" required>
+            </div>
+            <button onclick="addComic()">Add Comic</button>
+        </div>
+        
+        <div id="addChapter" class="tabcontent">
+            <h2>Add Chapter to Comic</h2>
+            <div class="form-group">
+                <label for="chapterComicId">Comic ID:</label>
+                <input type="number" id="chapterComicId" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="chapterNumber">Chapter Number:</label>
+                <input type="number" id="chapterNumber" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="totalImages">Total Images:</label>
+                <input type="number" id="totalImages" min="1" required>
+            </div>
+            <button onclick="addChapter()">Add Chapter</button>
+        </div>
+        
+        <div id="viewComics" class="tabcontent">
+            <h2>View Comics</h2>
+            <div id="comicsList">
+                <p>Loading comics data...</p>
+            </div>
+        </div>
+        
+        <div id="output"></div>
+    </div>
+    
+    <script src="../scripts/comics-data.js"></script>
+    <script src="../scripts/admin.js"></script>
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            // Hide all tab content
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            
+            // Remove active class from all tab buttons
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            // Show the current tab and add active class to the button
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+            
+            // Load comics data if viewing comics tab
+            if (tabName === 'viewComics') {
+                loadComicsData();
+            }
+        }
+        
+        function addComic() {
+            const id = parseInt(document.getElementById('comicId').value);
+            const title = document.getElementById('comicTitle').value;
+            const coverImage = document.getElementById('coverImage').value;
+            const description = document.getElementById('description').value;
+            const firstChapter = parseInt(document.getElementById('firstChapter').value);
+            
+            if (!id || !title || !coverImage || !description || !firstChapter) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            addNewComic(id, title, coverImage, description, firstChapter);
+        }
+        
+        function addChapter() {
+            const comicId = parseInt(document.getElementById('chapterComicId').value);
+            const chapterNumber = parseInt(document.getElementById('chapterNumber').value);
+            const totalImages = parseInt(document.getElementById('totalImages').value);
+            
+            if (!comicId || !chapterNumber || !totalImages) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            addChapterToComic(comicId, chapterNumber, totalImages);
+        }
+        
+        function loadComicsData() {
+            const comicsList = document.getElementById('comicsList');
+            comicsList.innerHTML = '';
+            
+            if (typeof comicsData === 'undefined') {
+                comicsList.innerHTML = '<p>Comics data not loaded. Please try again.</p>';
+                return;
+            }
+            
+            const comics = comicsData.comics;
+            if (!comics || comics.length === 0) {
+                comicsList.innerHTML = '<p>No comics found.</p>';
+                return;
+            }
+            
+            let html = '<ul>';
+            comics.forEach(comic => {
+                html += `<li>
+                    <h3>${comic.title} (ID: ${comic.id})</h3>
+                    <p><strong>Cover:</strong> ${comic.coverImage}</p>
+                    <p><strong>Description:</strong> ${comic.description}</p>
+                    <p><strong>First Chapter:</strong> ${comic.firstChapter}</p>
+                    <p><strong>Chapters:</strong></p>
+                    <ul>`;
+                
+                const chapters = Object.keys(comic.chapters).sort((a, b) => parseInt(a) - parseInt(b));
+                chapters.forEach(chapterNum => {
+                    const chapter = comic.chapters[chapterNum];
+                    html += `<li>Chapter ${chapterNum}: ${chapter.totalImages} images</li>`;
+                });
+                
+                html += `</ul>
+                </li>`;
+            });
+            html += '</ul>';
+            
+            comicsList.innerHTML = html;
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Default to the first tab
+            document.getElementsByClassName('tablinks')[0].click();
+        });
+    </script>
+</body>
+</html> 

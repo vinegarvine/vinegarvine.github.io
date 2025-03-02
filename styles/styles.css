@@ -198,6 +198,48 @@ main {
     margin: 0px 0;
 }
 
+/* Lazy loading styles */
+.image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.lazy-load {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.lazy-load[src^="data:image/svg+xml"] {
+    min-height: 200px;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+}
+
+.lazy-load[src^="http"], .lazy-load[src^="../"] {
+    opacity: 1;
+}
+
+/* Disabled button styles */
+.navigation-buttons a.disabled {
+    background-color: #444;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.navigation-buttons a.disabled:hover {
+    background-color: #444;
+}
+
+/* Improved comic reader styles */
+.comic-title {
+    font-size: 24px;
+    margin: 20px 0;
+    text-align: center;
+    color: #fff;
+}
+
 /* Media Queries for Mobile Responsiveness */
 @media (max-width: 1000px) {
     header {
@@ -301,4 +343,75 @@ main {
         width: 80%;
         margin: 0px 0;
     }
+    
+    .comic-title {
+        font-size: 18px;
+        margin: 15px 0;
+    }
+    
+    .image-container {
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 600px) {
+    .comics {
+        gap: 10px;
+    }
+    
+    .comic {
+        width: 120px;
+        padding: 10px;
+    }
+    
+    .comic-reader img {
+        width: 95%;
+    }
+    
+    .navigation-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .navigation-buttons a {
+        width: 80%;
+        margin: 5px 0;
+        text-align: center;
+    }
+    
+    .navigation-buttons a:first-child,
+    .navigation-buttons a:nth-child(2) {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+/* Loading indicator styles */
+.loading-indicator {
+    text-align: center;
+    padding: 20px;
+    color: #fff;
+    font-size: 18px;
+    background-color: #1a1a1a;
+    border-radius: 5px;
+    margin: 20px auto;
+    max-width: 300px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #1a1a1a;
+    color: #999;
+    margin-top: 30px;
+    font-size: 14px;
 }

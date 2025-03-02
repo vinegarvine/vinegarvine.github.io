@@ -117,6 +117,8 @@
         <div class="tab">
             <button class="tablinks active" onclick="openTab(event, 'addComic')">Add Comic</button>
             <button class="tablinks" onclick="openTab(event, 'addChapter')">Add Chapter</button>
+            <button class="tablinks" onclick="openTab(event, 'manageChapters')">Manage Chapters</button>
+            <button class="tablinks" onclick="openTab(event, 'directoryHelper')">Directory Helper</button>
             <button class="tablinks" onclick="openTab(event, 'viewComics')">View Comics</button>
         </div>
         
@@ -160,6 +162,54 @@
                 <input type="number" id="totalImages" min="1" required>
             </div>
             <button onclick="addChapter()">Add Chapter</button>
+        </div>
+        
+        <div id="manageChapters" class="tabcontent">
+            <h2>Manage Available Chapters</h2>
+            <p>Use this tool to update the chapters.json file for a comic, which controls which chapters are displayed on the website.</p>
+            
+            <div class="form-group">
+                <label for="chaptersComicId">Comic ID:</label>
+                <input type="number" id="chaptersComicId" min="1" required>
+            </div>
+            
+            <button onclick="loadChaptersJson()">Load Chapters</button>
+            
+            <div id="chaptersJsonEditor" style="display: none; margin-top: 20px;">
+                <h3>Available Chapters</h3>
+                <div id="chaptersCheckboxes"></div>
+                
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="newChapterNum">Add New Chapter:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="newChapterNum" min="1" style="flex: 1;">
+                        <button onclick="addChapterToJson()">Add</button>
+                    </div>
+                </div>
+                
+                <button onclick="saveChaptersJson()" style="margin-top: 15px;">Save Changes</button>
+                
+                <div id="chaptersJsonOutput" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+        
+        <div id="directoryHelper" class="tabcontent">
+            <h2>Directory Structure Helper</h2>
+            <p>Use this tool to generate the directory structure needed for a new chapter.</p>
+            
+            <div class="form-group">
+                <label for="dirComicId">Comic ID:</label>
+                <input type="number" id="dirComicId" min="1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="dirChapterNum">Chapter Number:</label>
+                <input type="number" id="dirChapterNum" min="1" required>
+            </div>
+            
+            <button onclick="generateDirectoryStructure()">Generate Structure</button>
+            
+            <div id="directoryOutput" style="margin-top: 20px;"></div>
         </div>
         
         <div id="viewComics" class="tabcontent">
@@ -265,6 +315,222 @@
             html += '</ul>';
             
             comicsList.innerHTML = html;
+        }
+        
+        // Function to load the chapters.json file for a comic
+        function loadChaptersJson() {
+            const comicId = parseInt(document.getElementById('chaptersComicId').value);
+            if (!comicId) {
+                alert('Please enter a Comic ID');
+                return;
+            }
+            
+            // Try to fetch the current chapters.json file
+            fetch(`../images/comic${comicId}/chapters.json`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Chapters file not found');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Show the editor
+                    document.getElementById('chaptersJsonEditor').style.display = 'block';
+                    
+                    // Get all chapters from the comic data
+                    const comic = comicsData.comics.find(c => c.id === comicId);
+                    if (!comic) {
+                        alert(`Comic with ID ${comicId} not found in comics-data.js!`);
+                        return;
+                    }
+                    
+                    const allChapters = Object.keys(comic.chapters).sort((a, b) => parseInt(a) - parseInt(b));
+                    const availableChapters = data.availableChapters || [];
+                    
+                    // Create checkboxes for each chapter
+                    const checkboxesContainer = document.getElementById('chaptersCheckboxes');
+                    checkboxesContainer.innerHTML = '';
+                    
+                    allChapters.forEach(chapterNum => {
+                        const isAvailable = availableChapters.includes(chapterNum.toString());
+                        
+                        const checkboxDiv = document.createElement('div');
+                        checkboxDiv.style.marginBottom = '5px';
+                        
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = `chapter-${chapterNum}`;
+                        checkbox.value = chapterNum;
+                        checkbox.checked = isAvailable;
+                        
+                        const label = document.createElement('label');
+                        label.htmlFor = `chapter-${chapterNum}`;
+                        label.textContent = ` Chapter ${chapterNum}`;
+                        
+                        checkboxDiv.appendChild(checkbox);
+                        checkboxDiv.appendChild(label);
+                        checkboxesContainer.appendChild(checkboxDiv);
+                    });
+                    
+                    // Display the current JSON
+                    const jsonOutput = document.getElementById('chaptersJsonOutput');
+                    jsonOutput.innerHTML = `<h4>Current chapters.json:</h4>
+                        <pre>${JSON.stringify(data, null, 4)}</pre>`;
+                })
+                .catch(error => {
+                    console.error('Error loading chapters.json:', error);
+                    
+                    // If file doesn't exist, create a new one with all chapters
+                    const comic = comicsData.comics.find(c => c.id === comicId);
+                    if (!comic) {
+                        alert(`Comic with ID ${comicId} not found in comics-data.js!`);
+                        return;
+                    }
+                    
+                    // Show the editor
+                    document.getElementById('chaptersJsonEditor').style.display = 'block';
+                    
+                    const allChapters = Object.keys(comic.chapters).sort((a, b) => parseInt(a) - parseInt(b));
+                    
+                    // Create checkboxes for each chapter
+                    const checkboxesContainer = document.getElementById('chaptersCheckboxes');
+                    checkboxesContainer.innerHTML = '';
+                    
+                    allChapters.forEach(chapterNum => {
+                        const checkboxDiv = document.createElement('div');
+                        checkboxDiv.style.marginBottom = '5px';
+                        
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = `chapter-${chapterNum}`;
+                        checkbox.value = chapterNum;
+                        checkbox.checked = false; // Default to unchecked for new file
+                        
+                        const label = document.createElement('label');
+                        label.htmlFor = `chapter-${chapterNum}`;
+                        label.textContent = ` Chapter ${chapterNum}`;
+                        
+                        checkboxDiv.appendChild(checkbox);
+                        checkboxDiv.appendChild(label);
+                        checkboxesContainer.appendChild(checkboxDiv);
+                    });
+                    
+                    // Display empty JSON
+                    const jsonOutput = document.getElementById('chaptersJsonOutput');
+                    jsonOutput.innerHTML = `<h4>New chapters.json will be created:</h4>
+                        <pre>{\n    "availableChapters": []\n}</pre>`;
+                });
+        }
+        
+        // Function to add a new chapter to the JSON
+        function addChapterToJson() {
+            const newChapterNum = document.getElementById('newChapterNum').value;
+            if (!newChapterNum) {
+                alert('Please enter a chapter number');
+                return;
+            }
+            
+            // Create a new checkbox for this chapter
+            const checkboxesContainer = document.getElementById('chaptersCheckboxes');
+            
+            // Check if this chapter already exists
+            const existingCheckbox = document.getElementById(`chapter-${newChapterNum}`);
+            if (existingCheckbox) {
+                existingCheckbox.checked = true;
+                alert(`Chapter ${newChapterNum} already exists and has been selected.`);
+                return;
+            }
+            
+            const checkboxDiv = document.createElement('div');
+            checkboxDiv.style.marginBottom = '5px';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `chapter-${newChapterNum}`;
+            checkbox.value = newChapterNum;
+            checkbox.checked = true;
+            
+            const label = document.createElement('label');
+            label.htmlFor = `chapter-${newChapterNum}`;
+            label.textContent = ` Chapter ${newChapterNum}`;
+            
+            checkboxDiv.appendChild(checkbox);
+            checkboxDiv.appendChild(label);
+            checkboxesContainer.appendChild(checkboxDiv);
+            
+            // Clear the input
+            document.getElementById('newChapterNum').value = '';
+        }
+        
+        // Function to save the chapters.json file
+        function saveChaptersJson() {
+            const comicId = parseInt(document.getElementById('chaptersComicId').value);
+            if (!comicId) {
+                alert('Please enter a Comic ID');
+                return;
+            }
+            
+            // Get all selected chapters
+            const checkboxes = document.querySelectorAll('#chaptersCheckboxes input[type="checkbox"]:checked');
+            const selectedChapters = Array.from(checkboxes).map(cb => cb.value);
+            
+            // Sort the chapters numerically
+            selectedChapters.sort((a, b) => parseInt(a) - parseInt(b));
+            
+            // Create the JSON data
+            const jsonData = {
+                availableChapters: selectedChapters
+            };
+            
+            // Display the JSON
+            const jsonOutput = document.getElementById('chaptersJsonOutput');
+            jsonOutput.innerHTML = `<h4>Updated chapters.json:</h4>
+                <pre>${JSON.stringify(jsonData, null, 4)}</pre>
+                <p>Copy this JSON and save it to <code>images/comic${comicId}/chapters.json</code></p>`;
+        }
+        
+        // Function to generate directory structure
+        function generateDirectoryStructure() {
+            const comicId = parseInt(document.getElementById('dirComicId').value);
+            const chapterNum = parseInt(document.getElementById('dirChapterNum').value);
+            
+            if (!comicId || !chapterNum) {
+                alert('Please enter both Comic ID and Chapter Number');
+                return;
+            }
+            
+            // Get comic data
+            const comic = comicsData.comics.find(c => c.id === comicId);
+            if (!comic) {
+                alert(`Comic with ID ${comicId} not found in comics-data.js!`);
+                return;
+            }
+            
+            // Check if chapter exists in comics-data.js
+            if (!comic.chapters[chapterNum]) {
+                alert(`Chapter ${chapterNum} is not defined in comics-data.js for this comic. Please add it first.`);
+                return;
+            }
+            
+            const totalImages = comic.chapters[chapterNum].totalImages;
+            
+            // Generate directory structure instructions
+            const directoryOutput = document.getElementById('directoryOutput');
+            directoryOutput.innerHTML = `
+                <h3>Directory Structure for ${comic.title} - Chapter ${chapterNum}</h3>
+                <p>Follow these steps to set up the directory structure:</p>
+                <ol>
+                    <li>Create directory: <code>images/comic${comicId}/chapter${chapterNum}/</code></li>
+                    <li>Add ${totalImages} images to this directory, named from 1.jpg to ${totalImages}.jpg</li>
+                    <li>Update chapters.json to include chapter ${chapterNum} (use the Manage Chapters tab)</li>
+                </ol>
+                <p>Command line instructions:</p>
+                <pre>mkdir -p images/comic${comicId}/chapter${chapterNum}/</pre>
+                <p>After creating the directory and adding images, make sure to update the chapters.json file:</p>
+                <pre>{
+    "availableChapters": [...existing chapters..., "${chapterNum}"]
+}</pre>
+            `;
         }
         
         // Initialize the page

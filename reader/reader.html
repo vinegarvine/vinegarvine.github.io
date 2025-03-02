@@ -26,6 +26,18 @@
     </header>
     <main class="comic-reader">
         <div id="comic-title" class="comic-title">Loading comic...</div>
+        
+        <!-- Add image size controls -->
+        <div class="reader-controls">
+            <label for="image-size">Image Size:</label>
+            <select id="image-size" onchange="changeImageSize(this.value)">
+                <option value="small">Small (50%)</option>
+                <option value="medium">Medium (65%)</option>
+                <option value="large">Large (80%)</option>
+                <option value="full" selected>Full Width (100%)</option>
+            </select>
+        </div>
+        
         <div class="navigation-buttons">
             <a id="back-to-cover" href="#">Cover</a>
             <a id="prev-chapter" href="#">Previous</a>
@@ -63,5 +75,47 @@
     <script type="text/javascript" src="//www.topcreativeformat.com/0491d7322f3705087f00a11c1ecacd54/invoke.js"></script>
     <script async="async" data-cfasync="false" src="//pl23467842.highcpmgate.com/3aed0c71c2a91d74b9c2991b876d02c0/invoke.js"></script>
     <div id="container-3aed0c71c2a91d74b9c2991b876d02c0"></div>
+    
+    <script>
+        // Add the image size change function
+        function changeImageSize(size) {
+            const images = document.querySelectorAll('.comic-reader img');
+            let width = '100%';
+            
+            switch(size) {
+                case 'small':
+                    width = '50%';
+                    break;
+                case 'medium':
+                    width = '65%';
+                    break;
+                case 'large':
+                    width = '80%';
+                    break;
+                case 'full':
+                    width = '100%';
+                    break;
+            }
+            
+            images.forEach(img => {
+                img.style.width = width;
+            });
+            
+            // Save preference to localStorage
+            localStorage.setItem('comicImageSize', size);
+        }
+        
+        // Load saved preference when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedSize = localStorage.getItem('comicImageSize');
+            if (savedSize) {
+                document.getElementById('image-size').value = savedSize;
+                changeImageSize(savedSize);
+            } else {
+                // If no preference is saved, use full width as default
+                changeImageSize('full');
+            }
+        });
+    </script>
 </body>
 </html> 

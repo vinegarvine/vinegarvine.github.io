@@ -36,8 +36,13 @@ const comicsData = {
             description: "A story about a musician genius who gets a second chance at life.",
             firstChapter: 1,
             chapters: {
-                1: { totalImages: 30 }
-                // Add more chapters as they become available
+                1: { totalImages: 30 },
+                2: { totalImages: 28 },
+                3: { totalImages: 32 },
+                4: { totalImages: 29 },
+                5: { totalImages: 31 },
+                6: { totalImages: 27 },
+                7: { totalImages: 33 }
             }
         },
         {

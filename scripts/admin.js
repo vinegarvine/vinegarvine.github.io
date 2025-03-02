@@ -56,14 +56,45 @@ function addChapterToComic(comicId, chapterNumber, totalImages) {
         // Generate the updated comics-data.js content
         const updatedContent = generateComicsDataContent(comicsData);
         
+        // Update the chapters.json file
+        updateChaptersJson(comicId, chapterNumber);
+        
         // Display the updated content for copying
         const outputDiv = document.getElementById('output') || document.createElement('div');
         outputDiv.id = 'output';
         outputDiv.innerHTML = `<h3>Updated comics-data.js</h3>
             <pre>${updatedContent}</pre>
-            <button onclick="copyToClipboard()">Copy to Clipboard</button>`;
+            <button onclick="copyToClipboard()">Copy to Clipboard</button>
+            <p>Don't forget to also update the chapters.json file in the images/comic${comicId}/ directory!</p>
+            <h4>chapters.json content:</h4>
+            <pre id="chaptersJson"></pre>`;
         document.body.appendChild(outputDiv);
     };
+}
+
+// Function to update the chapters.json file
+function updateChaptersJson(comicId, newChapter) {
+    // Try to fetch the current chapters.json file
+    fetch(`../images/comic${comicId}/chapters.json`)
+        .then(response => response.json())
+        .catch(() => ({ availableChapters: [] })) // If file doesn't exist, create a new one
+        .then(data => {
+            // Add the new chapter if it doesn't already exist
+            if (!data.availableChapters.includes(newChapter.toString())) {
+                data.availableChapters.push(newChapter.toString());
+                
+                // Sort the chapters numerically
+                data.availableChapters.sort((a, b) => parseInt(a) - parseInt(b));
+            }
+            
+            // Display the updated chapters.json content
+            const chaptersJsonPre = document.getElementById('chaptersJson');
+            if (chaptersJsonPre) {
+                chaptersJsonPre.textContent = JSON.stringify(data, null, 4);
+            }
+            
+            return data;
+        });
 }
 
 // Function to generate the comics-data.js content

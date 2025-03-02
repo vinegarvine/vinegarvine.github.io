@@ -61,12 +61,13 @@ main {
 
 .comic {
     text-align: center;
+    margin-bottom: 20px;
     color: #fff;
     text-decoration: none;
     background-color: #1A1919;
     padding: 20px;
     border-radius: 5px;
-    width: 150px;
+    width: 180px;
 }
 
 .comic img {
@@ -90,9 +91,9 @@ main {
 }
 
 .comic-details img {
-    width: 219px;
-    height: 296px;
-    margin-right: 20px; /* Added margin for spacing */
+    width: 260px;
+    height: 350px;
+    margin-right: 20px;
 }
 
 .comic-details h1, .comic-details h2 {
@@ -194,7 +195,7 @@ main {
 }
 
 .comic-reader img {
-    width: 55%;
+    width: 100%;
     margin: 0px 0;
 }
 
@@ -203,7 +204,7 @@ main {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
 }
 
 .lazy-load {
@@ -340,7 +341,36 @@ main {
         padding: 10px 10px;
     }
     .comic-reader img {
-        width: 80%;
+        width: 85%;
+        margin: 0px 0;
+    }
+    
+    .comic-title {
+        font-size: 18px;
+        margin: 15px 0;
+    }
+    
+    .image-container {
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 768px) {
+    .comic-title {
+        font-size: 24px;
+        margin: 20px 0;
+    }
+    
+    .navigation-buttons a {
+        padding: 10px 10px;
+    }
+    
+    .navigation-buttons a:nth-child(2) {
+        margin-left: 5px; /* Add margin only to the left of the second button */
+        padding: 10px 10px;
+    }
+    .comic-reader img {
+        width: 100%; /* Changed from 85% to 100% for full width as default */
         margin: 0px 0;
     }
     
@@ -360,12 +390,12 @@ main {
     }
     
     .comic {
-        width: 120px;
+        width: 140px;
         padding: 10px;
     }
     
     .comic-reader img {
-        width: 95%;
+        width: 100%; /* Changed from 98% to 100% for full width as default */
     }
     
     .navigation-buttons {
@@ -414,4 +444,31 @@ footer {
     color: #999;
     margin-top: 30px;
     font-size: 14px;
+}
+
+/* Reader controls */
+.reader-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+    gap: 10px;
+}
+
+.reader-controls label {
+    font-weight: bold;
+    color: #333;
+}
+
+.reader-controls select {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.reader-controls select:focus {
+    outline: none;
+    border-color: #6a0dad;
 }

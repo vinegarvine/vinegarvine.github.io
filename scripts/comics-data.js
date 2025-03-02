@@ -26,7 +26,8 @@ const comicsData = {
                 16: { totalImages: 17 },
                 17: { totalImages: 23 },
                 92: { totalImages: 30 },
-                93: { totalImages: 30 }
+                93: { totalImages: 30 },
+                94: { totalImages: 23 },
             }
         },
         {
@@ -53,7 +54,6 @@ const comicsData = {
             firstChapter: 1,
             chapters: {
                 1: { totalImages: 20 }
-                // Add more chapters as they become available
             }
         },
         {
@@ -64,7 +64,6 @@ const comicsData = {
             firstChapter: 1,
             chapters: {
                 1: { totalImages: 20 }
-                // Add more chapters as they become available
             }
         }
     ]
@@ -95,4 +94,4 @@ function getChaptersForComic(comicId) {
     
     // Sort chapters in descending order (newest first)
     return chapters.sort((a, b) => b.number - a.number);
-} 
+}

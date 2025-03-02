@@ -8,7 +8,7 @@
 function addNewComic(id, title, coverImage, description, firstChapter) {
     // Load the current comics data
     const comicsDataScript = document.createElement('script');
-    comicsDataScript.src = 'comics-data.js';
+    comicsDataScript.src = '../scripts/comics-data.js';
     document.body.appendChild(comicsDataScript);
     
     comicsDataScript.onload = function() {
@@ -39,7 +39,7 @@ function addNewComic(id, title, coverImage, description, firstChapter) {
 function addChapterToComic(comicId, chapterNumber, totalImages) {
     // Load the current comics data
     const comicsDataScript = document.createElement('script');
-    comicsDataScript.src = 'comics-data.js';
+    comicsDataScript.src = '../scripts/comics-data.js';
     document.body.appendChild(comicsDataScript);
     
     comicsDataScript.onload = function() {

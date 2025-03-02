@@ -209,11 +209,7 @@ function initializeComicReaderPage() {
     // Get the loading indicator
     const loadingIndicator = comicImagesContainer.querySelector('.loading-indicator');
     
-    const totalImages = chapterData.totalImages;
     const imageFolder = `../images/comic${comicId}/chapter${chapter}/`;
-    
-    // Counter for loaded images
-    let loadedImagesCount = 0;
     
     // Implement lazy loading for images
     const observer = new IntersectionObserver((entries, observer) => {
@@ -230,32 +226,65 @@ function initializeComicReaderPage() {
         });
     }, { rootMargin: "0px 0px 200px 0px" });
     
-    // Create placeholder for each image
-    for (let i = 1; i <= totalImages; i++) {
-        const imgContainer = document.createElement('div');
-        imgContainer.className = 'image-container';
-        
-        const img = document.createElement('img');
-        img.alt = `Comic Page ${i}`;
-        img.className = 'lazy-load';
-        img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 1 1"%3E%3C%2Fsvg%3E';
-        img.setAttribute('data-src', `${imageFolder}${i}.jpg`);
-        
-        // Handle image loading events
-        img.onload = function() {
-            loadedImagesCount++;
-            
-            // If all images have loaded, hide the loading indicator
-            if (loadedImagesCount >= totalImages && loadingIndicator) {
-                loadingIndicator.style.display = 'none';
+    // Try to use the PHP script to get the list of images
+    fetch(`../scripts/list-images.php?comicId=${comicId}&chapter=${chapter}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.images && data.images.length > 0) {
+                // Use the images from the PHP script
+                loadImagesFromList(data.images, imageFolder);
+            } else {
+                // Try to load from images.txt file
+                tryLoadFromTextFile();
             }
-        };
+        })
+        .catch(error => {
+            console.error('Error fetching image list from PHP:', error);
+            // Try to load from images.txt file
+            tryLoadFromTextFile();
+        });
+    
+    // Function to load images from a list provided by the PHP script
+    function loadImagesFromList(imageList, folderPath) {
+        // Counter for loaded images
+        let loadedImagesCount = 0;
+        const totalImages = imageList.length;
         
-        // Handle image loading errors
-        img.onerror = function() {
-            // Try PNG if JPG fails
-            this.onerror = function() {
-                console.error(`Failed to load image: ${imageFolder}${i}.jpg or ${imageFolder}${i}.png`);
+        // Clear any existing content
+        while (comicImagesContainer.firstChild) {
+            if (comicImagesContainer.firstChild.className === 'loading-indicator') {
+                break;
+            }
+            comicImagesContainer.removeChild(comicImagesContainer.firstChild);
+        }
+        
+        // Create an image element for each file in the list
+        imageList.forEach((filename, index) => {
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'image-container';
+            
+            const img = document.createElement('img');
+            img.alt = `Comic Page ${index + 1}`;
+            img.className = 'lazy-load';
+            img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 1 1"%3E%3C%2Fsvg%3E';
+            img.setAttribute('data-src', `${folderPath}${filename}`);
+            
+            // Handle image loading events
+            img.onload = function() {
+                loadedImagesCount++;
+                
+                // If all images have loaded, hide the loading indicator
+                if (loadedImagesCount >= totalImages && loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
+                
+                // Add loaded class for fade-in effect
+                this.classList.add('loaded');
+            };
+            
+            // Handle image loading errors
+            img.onerror = function() {
+                console.error(`Failed to load image: ${folderPath}${filename}`);
                 this.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 300 400"%3E%3Crect width%3D"300" height%3D"400" fill%3D"%23eee"%2F%3E%3Ctext x%3D"50%25" y%3D"50%25" dominant-baseline%3D"middle" text-anchor%3D"middle" font-family%3D"Arial" font-size%3D"20" fill%3D"%23999"%3EImage not found%3C%2Ftext%3E%3C%2Fsvg%3E';
                 
                 // Count this as loaded even if it failed
@@ -266,14 +295,133 @@ function initializeComicReaderPage() {
                     loadingIndicator.style.display = 'none';
                 }
             };
-            this.src = `${imageFolder}${i}.png`;
-        };
+            
+            imgContainer.appendChild(img);
+            comicImagesContainer.appendChild(imgContainer);
+            
+            // Observe the image for lazy loading
+            observer.observe(img);
+        });
+    }
+    
+    // Function to try loading from a text file
+    function tryLoadFromTextFile() {
+        // Try to fetch a text file with image filenames
+        fetch(`${imageFolder}images.txt`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('images.txt not found');
+                }
+                return response.text();
+            })
+            .then(text => {
+                // Split the text file by lines, filter out empty lines and comments
+                const imageList = text.split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0 && !line.startsWith('#'));
+                
+                if (imageList.length > 0) {
+                    // Use the images from the text file
+                    loadImagesFromList(imageList, imageFolder);
+                } else {
+                    // Fallback to the traditional method
+                    loadImagesTraditionally(chapterData.totalImages);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching image list from text file:', error);
+                // Fallback to the traditional method
+                loadImagesTraditionally(chapterData.totalImages);
+            });
+    }
+    
+    // Function to load images using the traditional method (numbered sequentially)
+    function loadImagesTraditionally(totalImages) {
+        // Counter for loaded images
+        let loadedImagesCount = 0;
         
-        imgContainer.appendChild(img);
-        comicImagesContainer.appendChild(imgContainer);
+        // Clear any existing content
+        while (comicImagesContainer.firstChild) {
+            if (comicImagesContainer.firstChild.className === 'loading-indicator') {
+                break;
+            }
+            comicImagesContainer.removeChild(comicImagesContainer.firstChild);
+        }
         
-        // Observe the image for lazy loading
-        observer.observe(img);
+        // Create placeholder for each image
+        for (let i = 1; i <= totalImages; i++) {
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'image-container';
+            
+            const img = document.createElement('img');
+            img.alt = `Comic Page ${i}`;
+            img.className = 'lazy-load';
+            img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 1 1"%3E%3C%2Fsvg%3E';
+            
+            // Try multiple file formats and naming patterns
+            img.setAttribute('data-src', `${imageFolder}${i}.jpg`);
+            
+            // Handle image loading events
+            img.onload = function() {
+                loadedImagesCount++;
+                
+                // If all images have loaded, hide the loading indicator
+                if (loadedImagesCount >= totalImages && loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
+                
+                // Add loaded class for fade-in effect
+                this.classList.add('loaded');
+            };
+            
+            // Handle image loading errors - try different formats and patterns
+            img.onerror = function() {
+                // Try PNG if JPG fails
+                this.onerror = function() {
+                    // Try WEBP if PNG fails
+                    this.onerror = function() {
+                        // Try different naming patterns
+                        this.onerror = function() {
+                            // Try page-X.jpg pattern
+                            this.onerror = function() {
+                                // Try image-X.jpg pattern
+                                this.onerror = function() {
+                                    // Try translated-X.jpg pattern
+                                    this.onerror = function() {
+                                        // Try translated-X.png pattern
+                                        this.onerror = function() {
+                                            console.error(`Failed to load image for page ${i} in ${imageFolder}`);
+                                            this.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" viewBox%3D"0 0 300 400"%3E%3Crect width%3D"300" height%3D"400" fill%3D"%23eee"%2F%3E%3Ctext x%3D"50%25" y%3D"50%25" dominant-baseline%3D"middle" text-anchor%3D"middle" font-family%3D"Arial" font-size%3D"20" fill%3D"%23999"%3EImage not found%3C%2Ftext%3E%3C%2Fsvg%3E';
+                                            
+                                            // Count this as loaded even if it failed
+                                            loadedImagesCount++;
+                                            
+                                            // If all images have been processed, hide the loading indicator
+                                            if (loadedImagesCount >= totalImages && loadingIndicator) {
+                                                loadingIndicator.style.display = 'none';
+                                            }
+                                        };
+                                        this.src = `${imageFolder}translated-${i}.png`;
+                                    };
+                                    this.src = `${imageFolder}translated-${i}.jpg`;
+                                };
+                                this.src = `${imageFolder}image-${i}.jpg`;
+                            };
+                            this.src = `${imageFolder}page-${i}.jpg`;
+                        };
+                        this.src = `${imageFolder}${i.toString().padStart(2, '0')}.jpg`;
+                    };
+                    this.src = `${imageFolder}${i}.webp`;
+                };
+                this.src = `${imageFolder}${i}.png`;
+            };
+            
+            imgContainer.appendChild(img);
+            comicImagesContainer.appendChild(imgContainer);
+            
+            // Observe the image for lazy loading
+            observer.observe(img);
+        }
     }
     
     // Navigation buttons functionality

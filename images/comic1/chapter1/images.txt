@@ -1,0 +1,9 @@
+# List of images in this chapter
+# One filename per line, in the order they should be displayed
+1.jpg
+2.jpg
+3.jpg
+4.jpg
+5.jpg
+# You can include comments with # at the start of the line
+# Images will be displayed in the order listed here 

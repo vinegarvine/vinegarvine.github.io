@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chapter 94</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+        }
+        .image-container {
+            margin-bottom: 30px;
+        }
+        .filename {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Testing Chapter 94 Images</h1>
+    
+    <div id="images-container">
+        <p>Loading images...</p>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imagesContainer = document.getElementById('images-container');
+            const imageFolder = 'images/comic1/chapter94/';
+            
+            // First try to load from images.txt
+            fetch(`${imageFolder}images.txt`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('images.txt not found');
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    // Split the text file by lines, filter out empty lines and comments
+                    const imageList = text.split('\n')
+                        .map(line => line.trim())
+                        .filter(line => line.length > 0 && !line.startsWith('#'));
+                    
+                    if (imageList.length > 0) {
+                        displayImages(imageList);
+                    } else {
+                        throw new Error('No images found in images.txt');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading from images.txt:', error);
+                    
+                    // Try to load all images in the directory
+                    const imagePatterns = [
+                        '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg',
+                        'translated-1.jpg', 'translated-2.jpg', 'translated-3.jpg', 'translated-4.jpg', 'translated-5.jpg',
+                        'translated-1.png', 'translated-2.png', 'translated-3.png', 'translated-4.png', 'translated-5.png'
+                    ];
+                    
+                    displayImages(imagePatterns);
+                });
+            
+            function displayImages(imageList) {
+                imagesContainer.innerHTML = '';
+                
+                imageList.forEach(filename => {
+                    const container = document.createElement('div');
+                    container.className = 'image-container';
+                    
+                    const img = document.createElement('img');
+                    img.src = `${imageFolder}${filename}`;
+                    img.alt = `Image ${filename}`;
+                    
+                    const filenameDiv = document.createElement('div');
+                    filenameDiv.className = 'filename';
+                    filenameDiv.textContent = filename;
+                    
+                    container.appendChild(img);
+                    container.appendChild(filenameDiv);
+                    imagesContainer.appendChild(container);
+                    
+                    // Handle image loading errors
+                    img.onerror = function() {
+                        this.style.display = 'none';
+                        filenameDiv.textContent = `${filename} (Failed to load)`;
+                        filenameDiv.style.color = 'red';
+                    };
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

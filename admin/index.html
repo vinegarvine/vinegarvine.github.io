@@ -521,8 +521,9 @@
                 <p>Follow these steps to set up the directory structure:</p>
                 <ol>
                     <li>Create directory: <code>images/comic${comicId}/chapter${chapterNum}/</code></li>
-                    <li>Add ${totalImages} images to this directory, named from 1.jpg to ${totalImages}.jpg</li>
+                    <li>Add your images to this directory (any filename is now supported)</li>
                     <li>Update chapters.json to include chapter ${chapterNum} (use the Manage Chapters tab)</li>
+                    <li><strong>Optional but recommended:</strong> Create an images.txt file in the chapter directory to specify the exact order of images</li>
                 </ol>
                 <p>Command line instructions:</p>
                 <pre>mkdir -p images/comic${comicId}/chapter${chapterNum}/</pre>
@@ -530,6 +531,15 @@
                 <pre>{
     "availableChapters": [...existing chapters..., "${chapterNum}"]
 }</pre>
+                <h4>Sample images.txt file:</h4>
+                <p>Create this file in the chapter directory to specify the exact order of images:</p>
+                <pre># List of images in this chapter
+# One filename per line, in the order they should be displayed
+image1.jpg
+image2.jpg
+image3.jpg
+# You can include comments with # at the start of the line
+# Images will be displayed in the order listed here</pre>
             `;
         }
         
